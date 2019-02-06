@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard/documentos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nuevo proyecto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list lines="full">
+    <ion-item>
+      <ion-input required type="text" placeholder="Nombre" [(ngModel)]="proyecto.nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-textarea rows="5" placeholder="Descripción" [(ngModel)]="proyecto.descripcion"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label>Forma de investigación</ion-label>
+      <ion-select placeholder="Seleccionar" [(ngModel)]="proyecto.formaInvestigacion">
+        <ion-select-option *ngFor="let forma of formasInvestigacion" [value]="forma">{{forma.descripcion}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Categoria</ion-label>
+      <ion-select placeholder="Seleccionar" [(ngModel)]="proyecto.categoria">
+        <ion-select-option *ngFor="let categoria of categorias" [value]="categoria">{{categoria.descripcion}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label>Estado</ion-label>
+      <ion-checkbox slot="end" [(ngModel)]="proyecto.estado"></ion-checkbox>
+    </ion-item>
+  </ion-list>
+
+  <ion-button shape="round" expand="full" (click)="saveProyecto()">Guardar</ion-button>
+</ion-content>

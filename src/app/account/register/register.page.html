@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/login"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Registro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list lines="full">
+    <ion-item>
+      <ion-input required type="number" placeholder="Código" [(ngModel)]="estudiante.codigo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="number" placeholder="Documento" [(ngModel)]="estudiante.documento"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="text" placeholder="Nombre" [(ngModel)]="estudiante.nombre"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="text" placeholder="Apellido" [(ngModel)]="estudiante.apellido"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="date" placeholder="Fecha de nacimiento" [(ngModel)]="estudiante.fechaNacimiento"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Carrera</ion-label>
+      <ion-select placeholder="Seleccionar" [(ngModel)]="estudiante.carrera">
+        <ion-select-option *ngFor="let carrera of carreras" [value]="carrera">{{carrera.descripcion}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="email" placeholder="Correo" [(ngModel)]="estudiante.correo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input required type="tel" placeholder="Teléfono" [(ngModel)]="estudiante.telefono"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" shape="round" (click)="saveEstudiante()">Registrarme</ion-button>
+</ion-content>

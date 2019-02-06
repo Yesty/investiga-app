@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-input placeholder="Código de estudiante" type="number" [(ngModel)]="codigoUsuario"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input placeholder="Documento de identidad" type="number" [(ngModel)]="documentoUsuario"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <ion-button shape="round" color="primary" expand="block" (click)="login()" >Ingresar</ion-button>
+  <ion-button shape="round" color="secondary" expand="block" href="/register">Registrarse</ion-button>
+
+</ion-content>
