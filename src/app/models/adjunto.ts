@@ -1,11 +1,11 @@
-import { Estudiante } from './estudiante';
+import { IEstudiante } from './estudiante';
 
-export class Adjunto {
+export interface IAdjunto {
     nombre: string;
     descripcion: string;
     enlace: string;
     tipo: string;
-    autor: Estudiante;
+    autor: IEstudiante;
     fechaCreacion: number;
     fechaModificacion: number;
     estado: boolean;

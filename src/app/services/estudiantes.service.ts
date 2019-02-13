@@ -2,18 +2,18 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Estudiante } from '../models/Estudiante';
+import { IEstudiante } from '../models/Estudiante';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EstudiantesService {
 
-  private estudiantesCollection: AngularFirestoreCollection<Estudiante>;
-  private estudiantes: Observable<Estudiante[]>;
+  private estudiantesCollection: AngularFirestoreCollection<IEstudiante>;
+  private estudiantes: Observable<IEstudiante[]>;
 
   constructor(private db: AngularFirestore) {
-    this.estudiantesCollection = db.collection<Estudiante>('estudiantes');
+    this.estudiantesCollection = db.collection<IEstudiante>('estudiantes');
 
     // Se consuluta el estado actual de los datos
     this.estudiantes = this.estudiantesCollection.snapshotChanges().pipe(
@@ -42,7 +42,7 @@ export class EstudiantesService {
   }
 
   getEstudianteQuery(codigo: string) {
-    return this.db.collection('estudiantes', s => s.where('codigo', '==', codigo)).snapshotChanges().pipe(
+    return this.db.collection<IEstudiante>('estudiantes', s => s.where('codigo', '==', codigo)).snapshotChanges().pipe(
       map(action => {
         return action.map(a => {
           const data = a.payload.doc.data();
@@ -53,8 +53,8 @@ export class EstudiantesService {
     );
   }
   getEstudiante = (id: string) => this.estudiantesCollection.doc(id).valueChanges();
-  updateEstudiante = (estudiante: Estudiante, id: string) => this.estudiantesCollection.doc(id).update(estudiante);
-  addEstudiante = (estudiante: Estudiante) => this.estudiantesCollection.add(estudiante);
+  updateEstudiante = (estudiante: IEstudiante, id: string) => this.estudiantesCollection.doc(id).update(estudiante);
+  addEstudiante = (estudiante: IEstudiante) => this.estudiantesCollection.add(estudiante);
   deleteEstudiante = (id: string) => this.estudiantesCollection.doc(id).delete();
 
 }

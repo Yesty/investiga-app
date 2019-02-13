@@ -1,4 +1,4 @@
-import { Usuario } from './../models/usuario';
+import { IUsuario } from './../models/usuario';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
 })
 export class UsuarioService {
 
-  private usuariosCollection: AngularFirestoreCollection<Usuario>;
-  private usuarios: Observable<Usuario[]>;
+  private usuariosCollection: AngularFirestoreCollection<IUsuario>;
+  private usuarios: Observable<IUsuario[]>;
 
   constructor(private db: AngularFirestore) {
-    this.usuariosCollection = db.collection<Usuario>('usuarios');
+    this.usuariosCollection = db.collection<IUsuario>('usuarios');
 
     // Se consuluta el estado actual de los datos
     this.usuarios = this.usuariosCollection.snapshotChanges().pipe(
@@ -33,7 +33,7 @@ export class UsuarioService {
    * @param documento Docuemento de usuario - string
    */
   getLogin(codigo: string, documento: string) {
-    return this.db.collection<Usuario>('usuarios', ref => ref.where('codigo', '==', codigo).where('documento', '==', documento));
+    return this.db.collection<IUsuario>('usuarios', ref => ref.where('codigo', '==', codigo).where('documento', '==', documento));
   }
 
   /**
@@ -41,6 +41,6 @@ export class UsuarioService {
    *
    * @memberof UsuarioService
    */
-  addUsuario = (usuario: Usuario) => this.usuariosCollection.add(usuario);
+  addUsuario = (usuario: IUsuario) => this.usuariosCollection.add(usuario);
 
 }

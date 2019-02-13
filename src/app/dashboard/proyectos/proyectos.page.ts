@@ -1,9 +1,12 @@
+import { IAsesor } from './../../models/asesor';
+import { IAdjunto } from './../../models/adjunto';
+import { CategoriasService } from './../../services/categorias.service';
 import { FormaInvestigacionService } from './../../services/forma-investigacion.service';
 import { EstudiantesService } from './../../services/estudiantes.service';
-import { Estudiante } from 'src/app/models/estudiante';
-import { Categoria } from './../../models/categoria';
-import { FormaInvestigacion } from './../../models/forma-investigacion';
-import { Proyecto } from './../../models/proyecto';
+import { IEstudiante } from 'src/app/models/estudiante';
+import { ICategoria } from './../../models/categoria';
+import { IFormaInvestigacion } from './../../models/forma-investigacion';
+import { IProyecto } from './../../models/proyecto';
 import { LoadingController, NavController } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { ProyectoService } from './../../services/proyecto.service';
@@ -17,35 +20,56 @@ import { Storage } from '@ionic/storage';
 })
 export class ProyectosPage implements OnInit {
 
-  proyecto: Proyecto;
+  proyecto: IProyecto = {
+    adjuntos: new Array<IAdjunto>(),
+    asesores: new Array<IAsesor>(),
+    categoria: null,
+    codigo: '',
+    descripcion: '',
+    estado: true,
+    estudiantes: new Array<{ codigo: string, tipo: string }>(),
+    fechaCreacion: 0,
+    fehcaModificacion: 0,
+    formaInvestigacion: null,
+    meritos: new Array<string>(),
+    nombre: '',
+    avanceProyecto: 'Ante proyecto'
+  };
+
   proyectoCodigo: string = null;
   titulo: string;
-  formasInvestigacion: FormaInvestigacion[];
-  categorias: Categoria[];
-  estudiante: any;
+  formasInvestigacion: IFormaInvestigacion[];
+  categorias: ICategoria[];
+  estudiante: IEstudiante;
   codigoEstudiante: string;
+  idEstudiante: string;
 
   constructor(
     private proyectoService: ProyectoService,
     private estudiantService: EstudiantesService,
+    private categoriaService: CategoriasService,
     private formasInvestigacionservice: FormaInvestigacionService,
     private route: ActivatedRoute,
     private loadingController: LoadingController,
     private nav: NavController,
     private storage: Storage,
   ) {
-    this.proyecto = new Proyecto();
 
-    this.storage.get('auth-token').then((val: any) => {
+    this.storage.get('auth-token').then((val: IEstudiante) => {
       this.codigoEstudiante = val[0].codigo;
 
       this.estudiantService.getEstudianteQuery(this.codigoEstudiante).subscribe(res => {
-        this.estudiante = res;
+        this.idEstudiante = res[0].id;
+        this.estudiante = <IEstudiante>res[0];
       });
     });
 
     this.formasInvestigacionservice.getFormasInvestigacion().subscribe(res => {
       this.formasInvestigacion = res;
+    });
+
+    this.categoriaService.getCategorias().subscribe(res => {
+      this.categorias = res;
     });
   }
 
@@ -69,7 +93,7 @@ export class ProyectosPage implements OnInit {
 
     this.proyectoService.getProyecto(this.proyectoCodigo).subscribe(res => {
       loading.dismiss();
-      this.proyecto = <Proyecto>res;
+      this.proyecto = <IProyecto>res;
       this.titulo = this.proyecto.nombre;
     });
   }
@@ -88,14 +112,25 @@ export class ProyectosPage implements OnInit {
         this.nav.navigateBack('/dashboard/home');
       });
     } else {
+      // Se obtienen los datos de la fecha para formatear el codigo para el proyecto
+      const year = new Date().getFullYear();
+      const month = new Date().getMonth();
+      const day = new Date().getDay();
+
+      let formatCodigo = this.proyecto.nombre.toLowerCase().replace(' ', '');
+      formatCodigo = `${formatCodigo}${year}${month}${day}`;
+
+      this.proyecto.codigo = formatCodigo;
       this.proyecto.fechaCreacion = new Date().getTime();
-      this.proyecto.estudiantes.push(this.estudiante);
+      this.proyecto.estudiantes.push({
+        codigo: this.estudiante.codigo,
+        tipo: 'Administrador'
+      });
       this.estudiante.proyectos.push(this.proyecto);
-      this.estudiantService.updateEstudiante(this.estudiante , this.codigoEstudiante);
 
-      const data = JSON.parse(JSON.stringify(this.proyecto));
+      this.estudiantService.updateEstudiante(this.estudiante, this.idEstudiante);
 
-      this.proyectoService.addProyecto(data).then(() => {
+      this.proyectoService.addProyecto(this.proyecto).then(() => {
         loading.dismiss();
         this.nav.navigateBack('/dashboard/home');
       });

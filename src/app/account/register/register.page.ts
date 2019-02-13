@@ -1,13 +1,14 @@
+import { IProyecto } from './../../models/proyecto';
 import { AuthenticationService } from './../../services/authentication.service';
 import { UsuarioService } from './../../services/usuario.service';
-import { Carrera } from './../../models/carrera';
-import { Usuario } from './../../models/usuario';
+import { ICarrera } from './../../models/carrera';
+import { IUsuario } from './../../models/usuario';
 import { CarrerasService } from './../../services/carreras.service';
 import { EstudiantesService, } from './../../services/estudiantes.service';
 import { ActivatedRoute } from '@angular/router';
 import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { Component, OnInit } from '@angular/core';
-import { Estudiante } from 'src/app/models/estudiante';
+import { IEstudiante } from 'src/app/models/estudiante';
 
 @Component({
   selector: 'app-register',
@@ -16,9 +17,32 @@ import { Estudiante } from 'src/app/models/estudiante';
 })
 export class RegisterPage implements OnInit {
 
-  estudiante: Estudiante;
-  usuario: Usuario;
-  carreras: Carrera[];
+  estudiante: IEstudiante = {
+    codigo: '',
+    apellido: '',
+    carrera: null,
+    correo: '',
+    documento: '',
+    estado: true,
+    fechaCreacion: 0,
+    fechaModificacion: 0,
+    fechaNacimiento: 0,
+    nombre: '',
+    proyectos: new Array<IProyecto>(),
+    telefono: ''
+  };
+
+  usuario: IUsuario = {
+    codigo: '',
+    docente: null,
+    documento: '',
+    estado: true,
+    estudiante: null,
+    fechaCreacion: 0,
+    fechaModificacion: 0
+  };
+
+  carreras: ICarrera[];
 
   constructor(
     private estudianteService: EstudiantesService,
@@ -29,10 +53,7 @@ export class RegisterPage implements OnInit {
     private nav: NavController,
     private toastController: ToastController,
     private authenticationServices: AuthenticationService
-  ) {
-    this.estudiante = new Estudiante();
-    this.usuario = new Usuario();
-  }
+  ) { }
 
   ngOnInit() {
     // Se carga el listado de carreras
@@ -60,12 +81,9 @@ export class RegisterPage implements OnInit {
     this.usuario.estudiante = this.estudiante;
     this.usuario.fechaCreacion = new Date().getDate();
 
-    const dataU = JSON.parse (JSON.stringify (this.usuario));
-    const dataE = JSON.parse (JSON.stringify (this.estudiante));
+    this.usuarioService.addUsuario(this.usuario);
 
-    this.usuarioService.addUsuario(dataU);
-
-    this.estudianteService.addEstudiante(dataE).then(() => {
+    this.estudianteService.addEstudiante(this.estudiante).then(() => {
       this.authenticationServices.login(this.usuario.codigo, this.usuario.documento);
       loading.dismiss();
       this.nav.navigateBack('/dashboard/home');

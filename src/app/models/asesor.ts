@@ -1,18 +1,14 @@
-import { Proyecto } from './proyecto';
-import { Asignatura } from './asignatura';
-export class Asesor {
-
-    constructor() {
-        this.proyectos = new Array<Proyecto>();
-    }
+import { IProyecto } from './proyecto';
+import { IAsignatura } from './asignatura';
+export interface IAsesor {
 
     documento: string;
     nombre: string;
     apellido: string;
     fechaNacimiento: number;
-    asignatura: Asignatura;
+    asignatura: IAsignatura;
     codigo: string;
-    proyectos: Proyecto[];
+    proyectos: IProyecto[];
     estado: boolean;
     fechaCreacion: number;
     fechaModificacion: number;

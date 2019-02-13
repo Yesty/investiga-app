@@ -1,4 +1,4 @@
-import { FormaInvestigacion } from './../models/forma-investigacion';
+import { IFormaInvestigacion } from './../models/forma-investigacion';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
@@ -9,11 +9,11 @@ import { Observable } from 'rxjs';
 })
 export class FormaInvestigacionService {
 
-  private formaInvestigacionCollection: AngularFirestoreCollection<FormaInvestigacion>;
-  private formaInvestigacion: Observable<FormaInvestigacion[]>;
+  private formaInvestigacionCollection: AngularFirestoreCollection<IFormaInvestigacion>;
+  private formaInvestigacion: Observable<IFormaInvestigacion[]>;
 
   constructor(private db: AngularFirestore) {
-    this.formaInvestigacionCollection = db.collection<FormaInvestigacion>('formas Investigacion');
+    this.formaInvestigacionCollection = db.collection<IFormaInvestigacion>('formasInvestigacion');
 
     // Se consuluta el estado actual de los datos
     this.formaInvestigacion = this.formaInvestigacionCollection.snapshotChanges().pipe(
@@ -42,6 +42,6 @@ export class FormaInvestigacionService {
   }
 
   getFormaInvestigacion = (id: string) => this.formaInvestigacionCollection.doc(id).valueChanges();
-  addFormaInvestigacion = (formaInvestigacion: FormaInvestigacion) => this.formaInvestigacionCollection.add(formaInvestigacion);
+  addFormaInvestigacion = (formaInvestigacion: IFormaInvestigacion) => this.formaInvestigacionCollection.add(formaInvestigacion);
   deleteFormaInvestigacion = (id: string) => this.formaInvestigacionCollection.doc(id).delete();
 }

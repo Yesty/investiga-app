@@ -1,4 +1,4 @@
-export class Carrera {
+export interface ICarrera {
     descripcion: string;
     estado: boolean;
     fechaCreacion: number;

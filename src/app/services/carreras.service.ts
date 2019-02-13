@@ -2,18 +2,18 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { Carrera } from '../models/carrera';
+import { ICarrera } from '../models/carrera';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarrerasService {
 
-  private carrerasCollection: AngularFirestoreCollection<Carrera>;
-  private carreras: Observable<Carrera[]>;
+  private carrerasCollection: AngularFirestoreCollection<ICarrera>;
+  private carreras: Observable<ICarrera[]>;
 
   constructor(private db: AngularFirestore) {
-    this.carrerasCollection = db.collection<Carrera>('carreras');
+    this.carrerasCollection = db.collection<ICarrera>('carreras');
   }
 
   /**

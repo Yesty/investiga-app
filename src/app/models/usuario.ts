@@ -1,10 +1,10 @@
-import { Estudiante } from './estudiante';
-import { Asesor } from './asesor';
-export class Usuario {
+import { IEstudiante } from './estudiante';
+import { IAsesor } from './asesor';
+export interface IUsuario {
     codigo: string;
     documento: string;
-    docente: Asesor;
-    estudiante: Estudiante;
+    docente: IAsesor;
+    estudiante: IEstudiante;
     fechaCreacion: number;
     fechaModificacion: number;
     estado: boolean;
